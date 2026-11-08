@@ -1,0 +1,22 @@
+tablo  
+--------
+ 117 MB
+(1 row)
+   indexrelname       | pg_size_pretty 
+--------------------------+----------------
+ girisler_pkey            | 44 MB
+ idx_girisler_uye         | 14 MB
+ idx_girisler_zamani      | 44 MB
+ idx_girisler_salon_zaman | 61 MB
+(4 rows)
+INSERT 0 100000
+DROP INDEX
+Time: 30.882 ms
+DROP INDEX
+Time: 21.300 ms
+DROP INDEX
+Time: 11.706 ms
+INSERT 0 100000
+Time: 260.839 ms
+"Her sütuna indeks atalım" diyen birine şu cevabı veririm:
+Her eklenen indeks okuma performansını artırsa da veritabanına yapılan INSERT, UPDATE ve DELETE işlemlerinde indeks ağaçlarının da yeniden güncellenmesine neden olarak yazma hızını düşürür. Ayrıca her indeks ekstra disk alanı tükettiğinden, indeksler bilinçsizce değil sadece sık sorgulanan sütunlara özel tasarlanmalıdır.

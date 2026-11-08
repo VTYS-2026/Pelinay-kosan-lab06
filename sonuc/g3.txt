@@ -1,0 +1,18 @@
+-----------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=14469.75..14469.76 rows=1 width=40) (actual time=25.279..25.281 rows=1 loops=1)
+   ->  Bitmap Heap Scan on girisler  (cost=115.24..14418.90 rows=10169 width=4) (actual time=4.086..23.402 rows=10246 loops=1)
+         Recheck Cond: (uye_id = 42)
+         Heap Blocks: exact=7426
+         ->  Bitmap Index Scan on idx_girisler_uye  (cost=0.00..112.69 rows=10169 width=0) (ac
+         --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1629.54..1629.55 rows=1 width=8) (actual time=15.121..15.123 rows=1 loops=1)
+   ->  Index Only Scan using idx_girisler_zamani on girisler  (cost=0.43..1508.09 rows=48583 width=0) (actual time=0.182..10.797 rows=47387 loops=1)
+         Index Cond: ((giris_zamani >= '2026-01-01 00:00:00'::timestamp without time zone) AND (giris_zamani < '2026-02-01 00:00:00'::timestamp without time zone))
+         Heap Fetches: 0
+ Planning Time: 0.251 ms
+ ---------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=1029.98..1029.99 rows=1 width=8) (actual time=17.298..17.300 rows=1 loops=1)
+   ->  Index Only Scan using idx_girisler_salon_zaman on girisler  (cost=0.43..962.25 rows=27091 width=0) (actual time=0.538..14.590 rows=27743 loops=1)
+         Index Cond: ((salon_id = 3) AND (giris_zamani >= '2026-06-01 00:00:00'::timestamp without time zone))
+         Heap Fetches: 0
+ Planning Time: 0.184 ms

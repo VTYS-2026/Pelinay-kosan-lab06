@@ -1,0 +1,6 @@
+-- =====================================================
+-- Föy 06 / Görev 2 — İndeks tasarımınız
+-- Föydeki üç hedef sorguyu hızlandıracak üç CREATE INDEX
+-- komutunu buraya yazın. Bileşik indekste sütun SIRASI önemlidir
+-- (eşitlik koşulu önce, aralık koşulu sonra).
+-- =====================================================

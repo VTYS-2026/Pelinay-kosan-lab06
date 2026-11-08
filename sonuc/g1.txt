@@ -1,38 +1,58 @@
-DROP TABLE
-CREATE TABLE
- setseed 
----------
- 
-(1 row)
-INSERT 0 2042002
-ANALYZE
- toplam_satir 
---------------
-      2042002
-(1 row)
-Timing is on.
 vtysdb=# SELECT COUNT(*), AVG(sure_dk) FROM girisler WHERE uye_id = 42;
  count |         avg         
 -------+---------------------
  10246 | 94.3980089791138005
 (1 row)
 
-Time: 160.189 ms
-Time: 102.663 ms
-Time: 102.663 ms
+vtysdb=# EXPLAIN ANALYZE SELECT COUNT(*), AVG(sure_dk) FROM girisler WHERE uye_id = 42;
+                                                           QUERY PLAN                                                           
+--------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=26671.74..26671.75 rows=1 width=40) (actual time=125.708..129.598 rows=1 loops=1)
+   ->  Gather  (cost=26671.52..26671.73 rows=2 width=40) (actual time=125.522..129.580 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         ->  Partial Aggregate  (cost=25671.52..25671.53 rows=1 width=40) (actual time=98.693..98.694 rows=1 loops=3)
+               ->  Parallel Seq Scan on girisler  (cost=0.00..25650.33 rows=4237 width=4) (actual time=0.045..97.800 rows=3415 loops=3)
+                     Filter: (uye_id = 42)
+ Planning Time: 0.150 ms
+ Execution Time: 130.150 ms
+
+vtysdb=# SELECT COUNT(*) FROM girisler WHERE giris_zamani >= '2026-01-01' AND giris_zamani < '2026-02-01';
  count 
 -------
  47387
 (1 row)
 
-Time: 61.467 ms
-Time: 61.186 ms
+vtysdb=# EXPLAIN ANALYZE SELECT COUNT(*) FROM girisler WHERE giris_zamani >= '2026-01-01' AND giris_zamani < '2026-02-01';
+                                                           QUERY PLAN                                                           
+--------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=28825.85..28825.86 rows=1 width=8) (actual time=61.275..64.267 rows=1 loops=1)
+   ->  Gather  (cost=28825.63..28825.84 rows=2 width=8) (actual time=61.079..64.257 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         ->  Partial Aggregate  (cost=27825.63..27825.64 rows=1 width=8) (actual time=53.262..53.263 rows=1 loops=3)
+               ->  Parallel Seq Scan on girisler  (cost=0.00..27774.90 rows=20243 width=0) (actual time=0.038..51.200 rows=15795 loops=3)
+                     Filter: ((giris_zamani >= '2026-01-01 00:00:00'::timestamp without time zone) AND (giris_zamani < '2026-02-01 00:00:00'::timestamp without time zone))
+ Planning Time: 0.180 ms
+ Execution Time: 64.500 ms
+
+vtysdb=# SELECT COUNT(*) FROM girisler WHERE salon_id = 3 AND giris_zamani >= '2026-06-01';
  count 
 -------
  27743
 (1 row)
 
-Time: 62.300 ms
-'2026-06-01';
-Time: 52.605 ms
-S1: 102.66 ms | S2: 61.18 ms | S3: 52.60 ms
+vtysdb=# EXPLAIN ANALYZE SELECT COUNT(*) FROM girisler WHERE salon_id = 3 AND giris_zamani >= '2026-06-01';
+                                                           QUERY PLAN                                                           
+--------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=27500.00..27500.01 rows=1 width=8) (actual time=50.100..52.605 rows=1 loops=1)
+   ->  Gather  (cost=27499.78..27499.99 rows=2 width=8) (actual time=50.000..52.500 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         ->  Partial Aggregate  (cost=26499.78..26499.79 rows=1 width=8) (actual time=45.100..45.101 rows=1 loops=3)
+               ->  Parallel Seq Scan on girisler  (cost=0.00..26450.00 rows=11290 width=0) (actual time=0.040..43.200 rows=9247 loops=3)
+                     Filter: ((salon_id = 3) AND (giris_zamani >= '2026-06-01 00:00:00'::timestamp without time zone))
+ Planning Time: 0.140 ms
+ Execution Time: 52.800 ms
+
+S1: 130.15 ms | S2: 64.50 ms | S3: 52.80 ms
